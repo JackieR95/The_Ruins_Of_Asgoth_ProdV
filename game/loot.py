@@ -27,11 +27,11 @@ Design notes:
 import random
 from typing import Optional, Sequence
 
-from .items import WEAPONS, Item
+from .items import WEAPONS, Item, Weapon
 from .utils import rnd
 
 
-def generate_loot(level: int) -> Optional[object]:
+def generate_loot(level: int) -> Optional[Weapon]:
         """Attempt to return a weapon appropriate for `level`.
 
         Behavior and rationale:

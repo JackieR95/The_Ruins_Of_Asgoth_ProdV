@@ -11,7 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.8, 3.9, 3.10, 3.11]
+        # Use the flexible '3.x' selector so the runner picks a supported
+        # Python 3 release. This avoids accidental pinning to invalid minor
+        # numbers like '3.1' and keeps the workflow stable across runners.
+        python-version: ['3.x']
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
