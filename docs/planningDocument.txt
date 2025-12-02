@@ -1,0 +1,41 @@
+Text Based Quest Game — brief planning notes (updated)
+
+High-level summary
+------------------
+Two heroes explore the Ruins of Asgoth, clearing rooms, fighting creatures, opening chests, trading with merchants, and ultimately facing a boss. Core gameplay is turn-based combat and room navigation; the game supports save/load, inventory management, and merchant flows.
+
+Recent engineering changes
+------------------------
+- Decoupled interactive I/O from core game modules: `game/dungeon.py` and `game/combat.py` now accept `input_handler` and `printer` for deterministic tests.
+- Introduced `CombatManager` in `game/combat.py` for clearer combat state encapsulation.
+- Centralized loot generation into `game/loot.py` and added statistical tests.
+- Added `GameState` save/load wrapper in `game/save.py` and round-trip tests.
+- Added UI helpers in `game/utils.py`: `prompt_confirm()` and `inventory_to_lines()`.
+
+Planned next engineering tasks
+-----------------------------
+1. Add module/function docstrings and concise inline comments for complex logic (start with `game/combat.py`, then `game/dungeon.py`, `game/items.py`).
+2. Centralize inventory display across UI (`main.py`, `game/dungeon.py`, and `game/combat.py`) to use `inventory_to_lines()`.
+3. Convert remaining smoke harnesses/tests to injected handlers (e.g., `test_run.py`) and add `CombatManager`-focused unit tests.
+4. Optionally refactor `main.py` into a `GameSession`/CLI wrapper that accepts `input_handler`/`printer` for full automation.
+5. Add integration tests for the elite/key/boss flow:
+	- Verify elites marked with `special='elite_key'` can drop the Ancient Ruins Key and that the key is awarded to the correct player.
+	- Verify the boss room requires the key to be opened and that the boss encounter completes with correct XP/loot handling.
+	- Implement `tests/test_boss_key_elite.py` covering these scenarios with injected `input_handler` and deterministic RNG seeding.
+
+Design notes / constraints
+-------------------------
+- `main.py` intentionally remains interactive for manual play; the rest of the codebase is now testable via injection.
+- Merchant policy: merchants only sell consumables; selling weapons grants gold but weapons are not added to merchant stock.
+
+Developer checklist (short)
+--------------------------
+- [x] Decouple I/O for core modules
+- [x] Centralize loot generation
+- [x] Add `GameState` save/load
+- [x] Add focused pytest tests and convert smoke-tests where practical
+- [ ] Add docstrings and inline comments (next step)
+- [ ] Centralize inventory UI prints
+- [ ] Convert remaining tests to injected handlers
+
+Use this file for planning notes and high-level decisions. For detailed per-file todos, see `docs/FILE_ISSUES.md` and `docs/TODO.md`.
